@@ -1,0 +1,27 @@
+NYTimes:
+
+Article search: 165e06a7784353f5ed817ba82076f71e:15:31478198
+
+**Most Popular** 84eb249fa018ef4e4e959bd2e5cd8ec4:17:31478198
+http://api.nytimes.com/svc/mostpopular/{version}/{resource-type}/{section}[/share-types]/{time-period}[.response-format]?api-key={your-API-key}
+
+
+Times Tags: 920c0aa1849afb8dbb4f596cc3e1cfca:15:31478198
+
+NewsWire: 383a34a4b72f4bad667ab0c2069baf07:8:31478198
+http://api.nytimes.com/svc/news/v3/content/nyt/all/.json?api-key=
+
+-------------------------------------------------------------------
+
+Twitter:
+key: ZNJDe9p2SXoVdODQWmPPrCCMV
+secret: v7rUql1q7BBKXvf0EYpJZJ9Mx56GDzlFKIzmE92VzRBNy3gQwz
+
+Access token	372004760-86NdQQQdLpsYds3meBSK8CgvhvKblZoBhYKNcN8
+Access token secret	PjzK9emt8RjjfhEzf2NNr1ZAOdHG1VscOKmsCK8R81DNL
+
+-------------------------------------------------------------------
+
+WUnderground: (morleysafer, wunderground)
+
+key: 418ccbe65bea6581
