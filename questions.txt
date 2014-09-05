@@ -1,0 +1,3 @@
+1.  The MVP spec only specifies an API request only when creating a feed.
+2.  Should the tables wipe between sessions?
+3.  What about a table dedicated to searches?
