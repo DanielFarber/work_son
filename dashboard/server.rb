@@ -34,8 +34,18 @@ post "/feeds/new" do
 	else
 		feed = Feed.create( {source: params["source"], search_term: params["search_term"]} )
 	end
-	feed.seed_posts
-	redirect("/")
+	posts = feed.seed_posts
+	# The following could probably be refactored, possibly into an object method: [feed].has_posts?
+	if !posts
+		feed.destroy
+		erb(:unfeed)
+	elsif posts.length < 10
+		posts.each {|post| post.destroy}
+		feed.destroy
+		erb(:unfeed)
+	else
+		redirect("/")
+	end
 end
 
 get "/feeds/:id" do
