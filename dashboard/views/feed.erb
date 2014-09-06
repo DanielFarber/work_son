@@ -4,6 +4,32 @@
 	<title><%= "#{feed.source}: #{feed.search_term}" %></title>
 </head>
 <body>
-
+	<% posts.each do |post| %>
+	<p>
+		<div><%= feed.search_term %></div>
+		<div><a href="<%= post.url %>"><%= post.context %></a></div>
+		<div><%= post.content %></div>
+		<div><%= post.time_data %></div>
+		<div>
+			<% if post.tag %>
+			<form action="/post/tag/<%= post.id %>" method="POST">
+				<input type="hidden" name="_method" value="PUT">
+				<input type="text" name="tag" placeholder="<%= post.tag %>">
+				<button>Change Tag</button>
+			</form>
+			<% else %>
+			<form action="/post/tag/<%= post.id %>" method="POST">
+				<input type="hidden" name="_method" value="PUT">
+				<input type="text" name="tag" placeholder="None">
+				<button>Add Tag</button>
+			</form>
+			<% end %>
+			<form action="post/<%= post.id %>" method="POST">
+				<input type="hidden" name="_method" value="DELETE">
+				<button>Delete this post</button>
+			</form>
+		</div>
+	</p>
+	<% end %>
 </body>
 </html>

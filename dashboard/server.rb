@@ -39,5 +39,7 @@ post "/feeds/new" do
 end
 
 get "/feeds/:id" do
-	erb(:feed, { locals: {feed: Feed.find_by( { id: params["id"]} ) } })
+	feed = Feed.find_by( { id: params["id"] } )
+	posts = Post.where({ feed_id: feed.id } )
+	erb(:feed, { locals: { feed: feed, posts: posts } })
 end
