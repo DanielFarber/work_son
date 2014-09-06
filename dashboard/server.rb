@@ -30,9 +30,9 @@ end
 
 post "/feeds/new" do
 	if params["source"] == "NYTimes"
-		feed = Feed.create( {source: "NYTimes", search_term: "Headlines"} )
+		feed = Feed.create( {source: "NYTimes", search_term: "Headlines", updated_at: Time.now} )
 	else
-		feed = Feed.create( {source: params["source"], search_term: params["search_term"]} )
+		feed = Feed.create( {source: params["source"], search_term: params["search_term"], updated_at: Time.now} )
 	end
 	posts = feed.seed_posts
 	# The following could probably be refactored, possibly into an object method: [feed].has_posts?
