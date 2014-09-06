@@ -1,11 +1,51 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Dashboard</title>
 </head>
 <body>
+	<div>Add a feed to your dashboard</div>
+		<form action="/feeds/new" method="POST">
+			<select name="source">
+				<option value="Twitter">Twitter</option>
+				<option value="NYTimes">The New York Times</option>
+				<option value="Wunderground">Weather</option>
+			</select>
+			<div>Add a city and state to your Weather feed, or a subject for your Twitter stream.</div>
+			<input type="text" name="search_term">
+			<button>Stream</button>
+		</form>
+	</div>
+
 	<% feeds.each do |feed| %>
-	<% posts = postmaster.select({feed_id: feed.id}) %>
-	<div>
-		
+	<h2><a href="/feeds/<%= feed.id %>"><%= "#{feed.source} #{feed.search_term}" %></a></h2>
+	<% postmaster.where({feed_id: feed.id}).each do |post| %>
+	<p>
+		<div><%= feed.search_term %></div>
+		<div><a href="<%= post.url %>"><%= post.context %></a></div>
+		<div><%= post.content %></div>
+		<div><%= post.time_data %></div>
+		<div>
+			<% if post.tag %>
+			<form action="/post/tag/<%= post.id %>" method="POST">
+				<input type="hidden" name="_method" value="PUT">
+				<input type="text" name="tag" placeholder="<%= post.tag %>">
+				<button>Change Tag</button>
+			</form>
+			<% else %>
+			<form action="/post/tag/<%= post.id %>" method="POST">
+				<input type="hidden" name="_method" value="PUT">
+				<input type="text" name="tag" placeholder="None">
+				<button>Add Tag</button>
+			</form>
+			<% end %>
+			<form action="post/<%= post.id %>" method="POST">
+				<input type="hidden" name="_method" value="DELETE">
+				<button>Delete this post</button>
+			</form>
+		</div>
+	</p>
+	<% end %>
+	<% end %>
 </body>
 </html>

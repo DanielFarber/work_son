@@ -51,12 +51,9 @@ class Feed < ActiveRecord::Base
 	end
 
 	def seed_weather_posts
-		location = self.search_term.split(",")
-		request = ("http://api.wunderground.com/api/418ccbe65bea6581/forecast10day/q/#{location[0]}/#{location[1]}.json")
-		response = nil
-		until response && response["forecast"]
-			response = HTTParty.get(request)
-		end
+		location = URI.encode(self.search_term).split(",%20")
+		request = ("http://api.wunderground.com/api/418ccbe65bea6581/forecast10day/q/#{location[1]}/#{location[0]}.json")
+		response = HTTParty.get(request)
 
 		selection = response["forecast"]["simpleforecast"]["forecastday"][0..9]	
 		selection.each_with_index do |day, index|
@@ -66,7 +63,7 @@ class Feed < ActiveRecord::Base
 				content: "High: #{day["high"]["fahrenheit"]} Low: #{day["low"]["fahrenheit"]}",
 				context: response["forecast"]["txt_forecast"]["forecastday"][index * 2]["fcttext"],
 				time_data: date,
-				url: "http://www.wunderground.com/cgi-bin/findweather/hdfForecast?query=#{location[1]}%2C+#{location[0]}"
+				url: "http://www.wunderground.com/cgi-bin/findweather/hdfForecast?query=#{location[0]}%2C+#{location[1]}"
 			}
 			Post.create(post)
 		end
