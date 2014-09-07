@@ -13,7 +13,7 @@ after do
 end
 
 get "/" do
-	erb(:index, { locals: { postmaster: Post.all.order(:id), feeds: Feed.all } })
+	erb(:index, { locals: { feeds: Feed.all } })
 end
 
 put "/post/tag/:id" do
@@ -23,8 +23,17 @@ put "/post/tag/:id" do
 	redirect("/")
 end
 
+get "/post/tag/search" do
+	posts = Post.where( { tag: params["tag"] } )
+	if posts.length == 0
+		erb(:sorry)
+	else
+		erb(:search, { locals: { posts: posts, tag: params["tag"] } })
+	end
+end
+
 delete "/post/:id" do
-	Post.find_by( {id: params["id"]} ).destroy
+	Post.find_by( {id: params["id"]} ).update( { deleted: true} )
 	redirect("/")
 end
 
@@ -34,8 +43,9 @@ post "/feeds/new" do
 	else
 		feed = Feed.create( {source: params["source"], search_term: params["search_term"], updated_at: Time.now} )
 	end
-	posts = feed.seed_posts
+	feed.seed_posts
 	# The following could probably be refactored, possibly into an object method: [feed].has_posts?
+	posts = feed.posts
 	if !posts
 		feed.destroy
 		erb(:unfeed)

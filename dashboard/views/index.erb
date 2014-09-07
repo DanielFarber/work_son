@@ -2,9 +2,10 @@
 <html>
 <head>
 	<title>Dashboard</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-	<div>Add a feed to your dashboard</div>
+	<div>Add a feed to your dashboard
 		<form action="/feeds/new" method="POST">
 			<select name="source">
 				<option value="Twitter">Twitter</option>
@@ -17,12 +18,19 @@
 			<button>Stream</button>
 		</form>
 	</div>
+	<div>Search for posts by tag
+		<form action="/post/tag/search" method="GET">
+			<input type="text" name="tag" placeholder="<<tag>>">
+			<button>Search</button>
+		</form>
+	</div>
+
 
 	<% feeds.each do |feed| %>
 	<!-- I don't like how this looks if the user enters a crummy term- specifically the Weather Underground search_term -->
 	<h2><a href="/feeds/<%= feed.id %>"><%= "#{feed.source} #{feed.search_term}" %></a></h2>
-	<% postmaster.where({feed_id: feed.id}).each do |post| %>
-	<p>
+	<% feed.posts.where( { deleted: false } ).order( { created_at: :desc } )[0..9].each do |post| %>
+	<div class="post">
 		<!-- I wonder if there's any way to make this all shorter? -->
 		<!-- Perhaps it can be done by implementing a child template for each feed.source -->
 		<div><%= feed.search_term %></div>
@@ -48,7 +56,7 @@
 				<button>Delete this post</button>
 			</form>
 		</div>
-	</p>
+	</div>
 	<% end %>
 	<% end %>
 </body>

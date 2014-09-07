@@ -32,7 +32,8 @@
 CREATE TABLE feeds (
 id serial primary key,
 source varchar(60),
-search_term varchar(60)
+search_term varchar(60),
+updated_at timestamp
 );
 
 CREATE TABLE posts (
@@ -42,5 +43,7 @@ content varchar(255),
 context varchar(255),
 time_data date,
 url varchar(255),
-tag varchar(255)
+tag varchar(255),
+deleted boolean,
+created_at timestamp
 );

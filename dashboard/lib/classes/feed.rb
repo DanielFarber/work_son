@@ -27,7 +27,9 @@ class Feed < ActiveRecord::Base
 				content: article["abstract"],
 				context: article["title"],
 				time_data: article["published_date"],
-				url: article["url"]
+				url: article["url"],
+				created_at: Time.now,
+				deleted: false
 			}
 			Post.create(post)
 		end
@@ -48,7 +50,9 @@ class Feed < ActiveRecord::Base
 					content: tweet.text,
 					context: tweet.user.screen_name,
 					time_data: tweet.created_at,
-					url: "http://www.twitter.com#{tweet.url.path}"
+					url: "http://www.twitter.com#{tweet.url.path}",
+					created_at: Time.now,
+					deleted: false
 				}
 				Post.create(post)
 			end
@@ -69,11 +73,17 @@ class Feed < ActiveRecord::Base
 					content: "High: #{day["high"]["fahrenheit"]} Low: #{day["low"]["fahrenheit"]}",
 					context: response["forecast"]["txt_forecast"]["forecastday"][index * 2]["fcttext"],
 					time_data: date,
-					url: "http://www.wunderground.com/cgi-bin/findweather/hdfForecast?query=#{location[0]}%2C+#{location[1]}"
+					url: "http://www.wunderground.com/cgi-bin/findweather/hdfForecast?query=#{location[0]}%2C+#{location[1]}",
+					created_at: Time.now,
+					deleted: false
 				}
 				Post.create(post)
 			end
 		end
+	end
+
+	def posts
+		posts = Post.where( { feed_id: self.id} )
 	end
 
 end
