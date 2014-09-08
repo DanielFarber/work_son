@@ -1,3 +1,7 @@
+body {
+font-family: 'Roboto Slab', serif;
+}
+
 .feed {
 	height: 250px;
 	width: 500px;
