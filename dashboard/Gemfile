@@ -1,0 +1,12 @@
+# A sample Gemfile
+source "https://rubygems.org"
+
+gem "activerecord"
+gem "sinatra"
+gem "sinatra-contrib"
+gem "pry"
+gem "twitter"
+gem "httparty"
+gem "json"
+gem "pg"
+# gem "rails"

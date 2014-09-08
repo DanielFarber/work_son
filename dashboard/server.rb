@@ -1,7 +1,6 @@
-require "pry"
-require "httparty"
-require "sinatra"
-require "sinatra/reloader"
+require "rubygems"
+require "bundler/setup"
+Bundler.require(:default)
 require_relative "./lib/connection"
 require_relative "./lib/classes/feed"
 require_relative "./lib/classes/post"
@@ -63,3 +62,36 @@ get "/feeds/:id" do
 	posts = Post.where({ feed_id: feed.id } )
 	erb(:feed, { locals: { feed: feed, posts: posts } })
 end
+
+get "/a/:id" do
+	feed = Feed.find_by( { id: params["id"] } )
+	posts = feed.posts
+	content_type :json
+	{ feed: feed, posts: posts }.to_json
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
