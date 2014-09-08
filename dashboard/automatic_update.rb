@@ -7,7 +7,7 @@ require_relative "./lib/classes/post"
 # Make sure that the loop doesn't consistently update for the period where those conditions are true.
 loop do
 
-	if Time.now.min == 00
+	if Time.now.min == 21
 		Feed.all.each do |feed|
 			if Time.now - feed.updated_at >= 1800
 				if feed.source == "Twitter"

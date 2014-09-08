@@ -1,6 +1,6 @@
-require "rubygems"
-require "bundler/setup"
-Bundler.require(:default)
+require "pry"
+require "sinatra"
+require "sinatra/reloader"
 require_relative "./lib/connection"
 require_relative "./lib/classes/feed"
 require_relative "./lib/classes/post"
@@ -32,7 +32,7 @@ get "/post/tag/search" do
 end
 
 delete "/post/:id" do
-	Post.find_by( {id: params["id"]} ).update( { deleted: true} )
+	Post.find_by( {id: params["id"]} ).update( { deleted: true } )
 	redirect("/")
 end
 
@@ -42,18 +42,12 @@ post "/feeds/new" do
 	else
 		feed = Feed.create( {source: params["source"], search_term: params["search_term"], updated_at: Time.now} )
 	end
-	feed.seed_posts
-	# The following could probably be refactored, possibly into an object method: [feed].has_posts?
-	posts = feed.posts
-	if !posts
-		feed.destroy
-		erb(:unfeed)
-	elsif posts.length < 10
-		posts.each {|post| post.destroy}
-		feed.destroy
-		erb(:unfeed)
-	else
+	success = feed.seed_posts
+	if success
 		redirect("/")
+	else
+		feed.destroy
+		erb(:unfeed)
 	end
 end
 
