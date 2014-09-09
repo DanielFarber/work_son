@@ -18,7 +18,11 @@ module Tumblr
 	end
 
 	def self.construct_hash(post, feed_id)
-		{feed_id: feed_id, content: post["caption"][0..254], context: post["blog_name"], time_data: post["date"], url: post["post_url"], tag: nil, deleted: false, created_at: Time.now}
+		{feed_id: feed_id, content: post["caption"], context: post["blog_name"], time_data: post["date"], url: post["post_url"], tag: nil, deleted: false, created_at: Time.now}
+	end
+
+	def self.post_exists?(hash)
+		Post.find_by( { url: hash[:url] } ) != nil
 	end
 
 	def self.seed_posts(feed)
@@ -38,5 +42,15 @@ module Tumblr
 		end
 	end
 
+	def self.update_stream(feed)
+		response = Tumblr.make_request(feed.search_term)
+		if Tumblr.search_returned_results?(response)
+			response["response"][0..9].each do |item|
+				post = Tumblr.construct_hash(item, feed.id)
+				Post.create(post) unless Tumblr.post_exists?(post)
+			end
+		end
+		return true
+	end
 
 end

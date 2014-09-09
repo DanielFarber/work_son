@@ -6,7 +6,7 @@ class Post < ActiveRecord::Base
 		if str.downcase.include?("http")
 			links = str.scan(/http\S+/)
 			links.each do |link|
-				str = str.gsub(link, "<a href='#{link}'>#{link}</a>")
+				str = str.gsub(link, "<a href='#{link}' target='_blank'>#{link}</a>")
 			end
 		end
 		str

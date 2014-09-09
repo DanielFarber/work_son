@@ -1,6 +1,6 @@
-require "pry"
-require "sinatra"
-require "sinatra/reloader"
+require "rubygems"
+require "bundler/setup"
+Bundler.require(:default)
 require_relative "./lib/connection"
 require_relative "./lib/classes/feed"
 require_relative "./lib/classes/post"
@@ -51,10 +51,13 @@ post "/feeds/new" do
 	end
 end
 
-get "/feeds/:id" do
+get "/feeds/:id/:page" do
 	feed = Feed.find_by( { id: params["id"] } )
-	posts = Post.where({ feed_id: feed.id } )
-	erb(:feed, { locals: { feed: feed, posts: posts } })
+	posts = Post.where({ feed_id: feed.id } ).order( { created_at: :desc })
+	page = params["page"].to_i
+	first = ( (page - 1) * 10)
+	last = ( page * 10 ) - 1
+	erb(:feed, { locals: { feed: feed, posts: posts, page: page, first: first, last: last } })
 end
 
 get "/a/:id" do

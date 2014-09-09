@@ -15,6 +15,10 @@ font-family: 'Roboto Slab', serif;
 	margin: 0 auto 15px auto;
 }
 
+#feedpage {
+	margin-top: 13%;
+}
+
 h2 {
 	text-align: center;
 }

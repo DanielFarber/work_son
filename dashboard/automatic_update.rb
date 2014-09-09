@@ -2,15 +2,17 @@ require_relative "./lib/connection"
 require_relative "./lib/classes/feed"
 require_relative "./lib/classes/post"
 require_relative "./lib/modules/tweeter"
-require_relative "./liib/modules/tumblr"
-require_relative "./liib/modules/weather"
-require_relative "./liib/modules/nytimes"
+require_relative "./lib/modules/tumblr"
+require_relative "./lib/modules/weather"
+require_relative "./lib/modules/nytimes"
 
 loop do
 
-	if [0, 15, 30, 45].include?(Time.now.min)
-
-
+	if [0, 15, 30, 33, 45].include?(Time.now.min)
+		Feed.all.each do |feed|
+			feed.update_stream
+		end
+	end
 
 
 end

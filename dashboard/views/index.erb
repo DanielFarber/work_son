@@ -28,37 +28,10 @@
 	</div>
 
 	<% feeds.each do |feed| %>
-	<!-- I don't like how this looks if the user enters a crummy term- specifically the Weather Underground search_term -->
-	<h2><a href="/feeds/<%= feed.id %>"><%= "#{feed.source} #{feed.search_term}" %></a></h2>
+	<h2><a href="/feeds/<%= feed.id %>/1"><%= "#{feed.source} #{feed.search_term}" %></a></h2>
 	<div class="feed">
 		<% feed.posts.where( { deleted: false } ).order( { created_at: :desc } )[0..9].each do |post| %>
-		<div class="post">
-			<!-- I wonder if there's any way to make this all shorter? -->
-			<!-- Perhaps it can be done by implementing a child template for each feed.source -->
-			<div><%= feed.search_term %></div>
-			<div><a href="<%= post.url %>"><%= post.context %></a></div>
-			<div><%= Post.link_to_text(post.content) unless post.content == nil %></div>
-			<div><%= post.time_data %></div>
-			<div>
-				<% if post.tag %>
-				<form action="/post/tag/<%= post.id %>" method="POST">
-					<input type="hidden" name="_method" value="PUT">
-					<input type="text" name="tag" placeholder="<%= post.tag %>">
-					<button>Change Tag</button>
-				</form>
-				<% else %>
-				<form action="/post/tag/<%= post.id %>" method="POST">
-					<input type="hidden" name="_method" value="PUT">
-					<input type="text" name="tag" placeholder="None">
-					<button>Add Tag</button>
-				</form>
-				<% end %>
-				<form action="post/<%= post.id %>" method="POST">
-					<input type="hidden" name="_method" value="DELETE">
-					<button>Delete this post</button>
-				</form>
-			</div>
-		</div>
+		<%= erb(:"posts/post", { locals: { feed: feed, post: post} } ) %>
 		<% end %>
 	</div>
 	<% end %>

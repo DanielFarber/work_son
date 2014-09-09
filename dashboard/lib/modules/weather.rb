@@ -26,8 +26,11 @@ module Weather
   		{feed_id: id, content: "High: #{day["high"]["fahrenheit"]} Low: #{day["low"]["fahrenheit"]}", context: forecast["forecast"]["txt_forecast"]["forecastday"][index * 2]["fcttext"], time_data: date, url: "http://www.wunderground.com/cgi-bin/findweather/hdfForecast?query=#{location[0]}%2C+#{location[1]}", created_at: Time.now, deleted: false}
   	end
 
+    def self.post_exists?(hash, feed)
+      Post.where( { feed_id: feed.id} ).find_by( { time_data: hash[:time_data] } ) != nil
+    end
 
-  	def self.seed_weather_posts(feed)
+  	def self.seed_posts(feed)
   		location = Weather.validate_wunderground_search(feed.search_term)
   		if location
   			forecast = Weather.get_forecast(location)
@@ -44,6 +47,21 @@ module Weather
   			false
   		end
   	end
+
+    def self.update_stream(feed)
+      location = Weather.validate_wunderground_search(feed.search_term)
+      forecast = Weather.get_forecast(location)
+      if Weather.has_forecast?(forecast)
+        forecast["forecast"]["simpleforecast"]["forecastday"][0..9].each_with_index do |day, index|
+          post = Weather.construct_weather_post(forecast, day, location, index, feed.id)
+          Post.create(post) unless Weather.post_exists?(post, feed)
+        end
+        return true
+      else
+        return false
+      end
+    end
+
 
 end
 

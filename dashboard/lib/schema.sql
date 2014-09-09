@@ -39,7 +39,7 @@ updated_at timestamp
 CREATE TABLE posts (
 id serial primary key,
 feed_id integer,
-content varchar(255),
+content text,
 context varchar(255),
 time_data date,
 url varchar(255),
