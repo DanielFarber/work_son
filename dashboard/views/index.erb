@@ -37,7 +37,7 @@
 			<!-- Perhaps it can be done by implementing a child template for each feed.source -->
 			<div><%= feed.search_term %></div>
 			<div><a href="<%= post.url %>"><%= post.context %></a></div>
-			<div><%= post.content %></div>
+			<div><%= Post.link_to_text(post.content) unless post.content == nil %></div>
 			<div><%= post.time_data %></div>
 			<div>
 				<% if post.tag %>
